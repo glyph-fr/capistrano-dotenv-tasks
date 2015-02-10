@@ -22,7 +22,7 @@ Or install it yourself as:
 
 Require it in your Capfile :
 
-```
+```ruby
 require 'capistrano/dotenv/tasks'
 ```
 
@@ -32,19 +32,19 @@ Then use it from the `cap` command.
 ### Show your config
 
 ```
-cap production config:show
+$ cap production config:show
 ```
 
 ### Create / Update a variable
 
 ```
-cap production config:set VARNAME=value
+$ cap production config:set VARNAME=value
 ```
 
 ### Delete a variable
 
 ```
-cap production config:remove key=VARNAME
+$ cap production config:remove key=VARNAME
 ```
 
 ## Contributing
