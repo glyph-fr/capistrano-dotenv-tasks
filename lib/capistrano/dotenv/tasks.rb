@@ -12,7 +12,7 @@ namespace :config do
   desc "Set an environment variable in .env config file"
   task :set do
     on roles(:app) do
-      config = Config.new(capture("cat #{ shared_path }/.env"))
+      config = Capistrano::Dotenv::Config.new(capture("cat #{ shared_path }/.env"))
       config.add(*ARGV[2..-1])
       upload!(StringIO.new(config.compile), "#{ shared_path }/.env")
     end
@@ -25,7 +25,7 @@ namespace :config do
     end
 
     on roles(:app) do
-      config = Config.new(capture("cat #{ shared_path }/.env"))
+      config = Capistrano::Dotenv::Config.new(capture("cat #{ shared_path }/.env"))
       config.remove(ENV['key'])
       upload!(StringIO.new(config.compile), "#{ shared_path }/.env")
     end
