@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["vala@glyph.fr"]
   spec.summary       = %q{Capistrano tasks to configure your remote dotenv files}
   spec.description   = %q{Capistrano tasks to configure your remote dotenv files}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/glyph-fr/capistrano-dotenv-tasks"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
