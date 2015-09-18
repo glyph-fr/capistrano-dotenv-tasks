@@ -1,26 +1,26 @@
+require 'stringio'
+require 'shellwords'
+
 module Capistrano
   module Dotenv
     class Config
       VARIABLE_PATTERN = /^(\w+)=(.+)$/i
 
-      attr_accessor :contents
+      attr_reader :contents, :variables
 
       def initialize(contents)
-        self.contents = contents
-        add(*contents.lines)
+        @contents = contents.to_s
+        @variables = {}
+        add(*@contents.lines)
       end
 
       def set(key, value)
         variables[key] = value
       end
 
-      def variables
-        @variables ||= {}
-      end
-
       def compile
         variables.map do |key, value|
-          %(#{ key }="#{ value }")
+          %(#{ key }=#{ value.shellescape })
         end.join("\n")
       end
 
@@ -37,6 +37,10 @@ module Capistrano
         args.each do |key|
           variables.delete(key)
         end
+      end
+
+      def to_io
+        StringIO.new(compile)
       end
 
       private

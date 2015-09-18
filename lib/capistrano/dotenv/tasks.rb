@@ -1,24 +1,31 @@
 require "capistrano/dotenv/version"
 require "capistrano/dotenv/config"
 
-set :capistrano_dotenv_path, -> { shared_path.join('.env') } 
+set :capistrano_dotenv_role, -> { :app }
+set :capistrano_dotenv_path, -> { shared_path.join('.env') }
+set :capistrano_dotenv_path_exists, -> { "[ -f #{fetch(:capistrano_dotenv_path).shellescape} ]" }
 
 namespace :config do
   desc "fetch existing environments variables from .env config file"
   task :show do
-    on roles(:app) do
-      puts capture(:cat, fetch(:capistrano_dotenv_path))
+    dotenv_path = fetch(:capistrano_dotenv_path).shellescape
+
+    on roles(fetch(:capistrano_dotenv_role)) do
+      info capture(:cat, dotenv_path) if test fetch(:capistrano_dotenv_path_exists)
     end
   end
 
   desc "Set an environment variable in .env config file"
   task :set do
     dotenv_path = fetch(:capistrano_dotenv_path)
-    
-    on roles(:app) do
-      config = Capistrano::Dotenv::Config.new(capture(:cat, dotenv_path))
+
+    on roles(fetch(:capistrano_dotenv_role)) do
+      contents = capture(:cat, dotenv_path) if test fetch(:capistrano_dotenv_path_exists)
+      config = Capistrano::Dotenv::Config.new(contents)
+
       config.add(*ARGV[2..-1])
-      upload!(StringIO.new(config.compile), dotenv_path)
+
+      upload!(config.to_io, dotenv_path)
     end
   end
 
@@ -30,10 +37,12 @@ namespace :config do
 
     dotenv_path = fetch(:capistrano_dotenv_path)
 
-    on roles(:app) do
-      config = Capistrano::Dotenv::Config.new(capture(:cat, dotenv_path))
+    on roles(fetch(:capistrano_dotenv_role)) do
+      contents = capture(:cat, dotenv_path) if test fetch(:capistrano_dotenv_path_exists)
+      config = Capistrano::Dotenv::Config.new(contents)
+
       config.remove(ENV['key'])
-      upload!(StringIO.new(config.compile), dotenv_path)
+      upload!(config.to_io, dotenv_path)
     end
   end
 end
