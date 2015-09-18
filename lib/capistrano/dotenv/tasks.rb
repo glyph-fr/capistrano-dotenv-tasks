@@ -46,3 +46,12 @@ namespace :config do
     end
   end
 end
+
+namespace :dotenv do
+  desc 'create the .env in shared directory'
+  task :touch do
+    on release_roles :all do # same as deploy:check:linked_files
+      execute :touch, fetch(:capistrano_dotenv_path).shellescape
+    end
+  end
+end
