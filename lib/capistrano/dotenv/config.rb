@@ -1,5 +1,4 @@
 require 'stringio'
-require 'shellwords'
 
 module Capistrano
   module Dotenv
@@ -8,7 +7,7 @@ module Capistrano
 
       attr_reader :contents, :variables
 
-      def initialize(contents)
+      def initialize(contents = ''.freeze)
         @contents = contents.to_s
         @variables = {}
         add(*@contents.lines)
@@ -20,7 +19,7 @@ module Capistrano
 
       def compile
         variables.map do |key, value|
-          %(#{ key }=#{ value.shellescape })
+          %(#{ key }=#{ value })
         end.join("\n")
       end
 
@@ -38,6 +37,8 @@ module Capistrano
           variables.delete(key)
         end
       end
+
+      alias_method :to_s, :compile
 
       def to_io
         StringIO.new(compile)
