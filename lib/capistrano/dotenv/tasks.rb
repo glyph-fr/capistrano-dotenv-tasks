@@ -14,7 +14,11 @@ namespace :config do
     dotenv_path = fetch(:capistrano_dotenv_path_escaped)
 
     on roles(fetch(:capistrano_dotenv_role)) do
-      info capture(:cat, dotenv_path) if test fetch(:capistrano_dotenv_path_exists)
+      if test fetch(:capistrano_dotenv_path_exists)
+        capture(:cat, dotenv_path).each_line do |line|
+          info line
+        end
+      end
     end
   end
 
