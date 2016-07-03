@@ -38,17 +38,18 @@ namespace :config do
 
   desc "Removes an environment variable from the .env config file"
   task :remove do |t, args|
-    unless ENV['key']
-      raise "You need to set `key=KEY_TO_BE_REMOVED` to remove a key"
-    end
-
     dotenv_path = fetch(:capistrano_dotenv_path_escaped)
 
     on roles(fetch(:capistrano_dotenv_role)) do
       contents = capture(:cat, dotenv_path) if test fetch(:capistrano_dotenv_path_exists)
       config = Capistrano::Dotenv::Config.new(contents)
 
-      config.remove(ENV['key'])
+      if ENV['key']
+        $stderr.puts "DEPRECATION WARNING: Using `key=KEY_TO_BE_REMOVED` is deprecated, just pass the keys as arguments to the task; `config:remove[KEY_A,KEY_B]`"
+        config.remove(ENV['key'])
+      else
+        config.remove(*args.extras)
+      end
       upload!(config.to_io, dotenv_path)
     end
   end
