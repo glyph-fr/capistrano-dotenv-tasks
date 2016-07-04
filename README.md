@@ -35,16 +35,22 @@ Then use it from the `cap` command.
 $ cap production config:show
 ```
 
-### Create / Update a variable
+### Set (create or update) a variable
 
 ```
 $ cap production config:set VARNAME=value
 ```
 
-### Delete a variable
+### Remove a variable
 
 ```
-$ cap production config:remove key=VARNAME
+$ cap production config:remove[VARNAME]
+```
+
+Or multiple at once:
+
+```
+$ cap production config:remove[VARNAME1,VARNAME2]
 ```
 
 ## Contributing
