@@ -18,10 +18,11 @@ module Capistrano
       end
 
       def compile
-        variables.map do |key, value|
+        Hash[variables.sort].map do |key, value|
           %(#{ key }=#{ value })
-        end.join("\n")
+        end.join("\n") << "\n"
       end
+      alias_method :to_s, :compile
 
       def add(*args)
         args.each do |string|
@@ -37,8 +38,6 @@ module Capistrano
           variables.delete(key)
         end
       end
-
-      alias_method :to_s, :compile
 
       def to_io
         StringIO.new(compile)
