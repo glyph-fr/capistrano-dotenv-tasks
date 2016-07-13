@@ -7,7 +7,7 @@ Show, set and delete env vars in your `.env` remote file with Capistrano 3.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capistrano-dotenv-tasks'
+gem 'capistrano-dotenv-tasks', require: false
 ```
 
 And then execute:
