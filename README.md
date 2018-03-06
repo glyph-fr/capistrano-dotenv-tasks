@@ -4,9 +4,10 @@ Show, set and delete env vars in your `.env` remote file with Capistrano 3.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add these lines to your application's Gemfile:
 
 ```ruby
+gem 'dotenv'  # if you haven't added it, already
 gem 'capistrano-dotenv-tasks', require: false
 ```
 
@@ -20,13 +21,23 @@ Or install it yourself as:
 
 ## Usage
 
-Require it in your Capfile :
+Require it in your Capfile:
 
 ```ruby
 require 'capistrano/dotenv/tasks'
 ```
 
-Then use it from the `cap` command.
+Make the `.env` file
+[a file that is shared between releases](http://capistranorb.com/documentation/getting-started/structure/)
+by adding one of the following lines to your `config/deploy.rb` script:
+
+```ruby
+append :linked_files, '.env'  # for capistrano >= 3.5
+set :linked_files, fetch(:linked_file, []).push('.env')  # for capistrano < 3.5
+```
+
+Then, access the capistrano rake tasks to edit your remote `.env` file from
+the `cap` command.
 
 
 ### Show your config
@@ -61,6 +72,6 @@ $ cap production config:remove[VARNAME1,VARNAME2]
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
-## Licence
+## License
 
 MIT
