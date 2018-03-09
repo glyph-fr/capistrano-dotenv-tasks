@@ -50,11 +50,9 @@ module Capistrano
           key = matches[1]
           value = matches[2]
 
-          return unless key && value
-
-          value.gsub!(/^['"]|['"]$/, '')
-
-          [key, value]
+          if key && value
+            [key, value]
+          end
         end
       end
     end
