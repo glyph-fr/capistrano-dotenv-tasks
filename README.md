@@ -64,6 +64,14 @@ Or multiple at once:
 $ cap production config:remove[VARNAME1,VARNAME2]
 ```
 
+## Configuration
+
+Set the env file for a given environment by adding the following line to your `config/deploy/staging.rb` script:
+```ruby
+set :capistrano_dotenv_file, -> { '.env.staging' }
+```
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/glyph-fr/capistrano-dotenv-tasks/fork )
