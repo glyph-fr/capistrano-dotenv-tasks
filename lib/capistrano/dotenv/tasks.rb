@@ -5,7 +5,7 @@ require 'shellwords'
 
 set :capistrano_dotenv_role, -> { :app }
 set :capistrano_dotenv_file do
-  default_file = '.env'
+  default_file = '.env.local'
   prompt = 'Enter .env.ENVIRONMENT or nothing to use the default'
   ask(:answer, default_file, prompt: prompt)
 end
@@ -27,7 +27,7 @@ namespace :config do
     end
   end
 
-  desc "Set an environment variable in .env config file"
+  desc "Set an environment variable in .env.ENVIRONMENT config file"
   task :set do
     dotenv_path = fetch(:capistrano_dotenv_path_escaped)
 
@@ -41,7 +41,7 @@ namespace :config do
     end
   end
 
-  desc "Removes an environment variable from the .env config file"
+  desc "Removes an environment variable from the .env.ENVIRONMENT config file"
   task :remove do |t, args|
     dotenv_path = fetch(:capistrano_dotenv_path_escaped)
 
@@ -61,7 +61,7 @@ namespace :config do
 end
 
 namespace :dotenv do
-  desc 'create the .env in shared directory'
+  desc 'create the .env.ENVIRONMENT in shared directory'
   task :touch do
     on release_roles :all do # same as deploy:check:linked_files
       execute :touch, fetch(:capistrano_dotenv_path_escaped)
