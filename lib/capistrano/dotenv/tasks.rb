@@ -4,7 +4,8 @@ require "capistrano/dotenv/config"
 require 'shellwords'
 
 set :capistrano_dotenv_role, -> { :app }
-set :capistrano_dotenv_path, -> { shared_path.join('.env') }
+set :capistrano_dotenv_file, -> { '.env' }
+set :capistrano_dotenv_path, -> { shared_path.join(fetch(:capistrano_dotenv_file)) }
 set :capistrano_dotenv_path_escaped, -> {fetch(:capistrano_dotenv_path).to_s.shellescape }
 set :capistrano_dotenv_path_exists, -> { "[ -f #{fetch(:capistrano_dotenv_path_escaped)} ]" }
 
